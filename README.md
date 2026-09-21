@@ -53,3 +53,18 @@ Observations representing performance degradation or failure exhibit:
 * **Latency Spikes:** `response_time_ms` exceeding threshold limits (e.g., spiking over 1000ms / 2500ms).
 * **Resource Exhaustion:** Extreme CPU utilization (`cpu_percent` > 85%–90%) or RAM saturation (`memory_percent` > 85%–90%).
 * **Elevated Log Errors:** Records with `WARN` or `ERROR` log levels indicating failed backend requests, database connection timeouts, or unhandled exceptions.
+
+
+### task3
+
+## Part 3: Anomaly Detection Findings
+
+### Detection Analysis
+* **Anomalies Detected:** Successfully isolated records with response times over 1000ms, CPU/memory usage above 85%, and log levels flagged as `WARN` or `ERROR`.
+* **Accuracy:**
+  * **Missed Anomalies:** None observed; all breached conditions were flagged.
+  * **False Positives:** None; baseline healthy observations returned `None`.
+
+### Limitations & Improvements
+* **Limitation:** Static thresholding does not dynamically adjust to scheduled high-traffic spikes or seasonal baseline changes.
+* **Possible Improvement:** Replace fixed thresholds with statistical anomaly detection (e.g., rolling standard deviation / Z-score) or dynamic baseline monitoring.
