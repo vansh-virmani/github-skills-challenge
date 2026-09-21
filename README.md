@@ -108,3 +108,61 @@ Producer publishing
 Topic queue
 Consumer consumption
 Downstream AIOps processing
+
+
+
+
+
+
+
+## Task 6: Final Verification and Workflow Summary
+
+### Objective
+The primary goal of this task was to validate the complete AIOps operational workflow and confirm that telemetry data can successfully move from ingestion to anomaly detection, event generation, publication, consumption, and final processing.
+
+### Operational Flow Verified
+The following sequence was successfully validated:
+
+Operational Data → Anomaly Detection → Event Generation → Producer → Topic → Consumer → AIOps Processing
+
+### Data Processing and Validation
+The telemetry dataset in `service_data.json` was loaded and processed record by record. Each operational record was inspected for abnormal behavior based on the configured thresholds and log severity conditions.
+
+The following conditions were checked:
+- response_time_ms > 1000 ms
+- cpu_percent > 85%
+- memory_percent > 85%
+- log_level values of WARN / ERROR were flagged with explicit reason messages
+
+### Anomaly Detection Results
+The anomaly detection logic correctly identified abnormal service records and generated structured anomaly events. These events included:
+- timestamp
+- service name
+- event type
+- reason list
+- full source telemetry payload
+
+This ensured that detected issues were clearly tied back to the operational data that triggered the alert.
+
+### Event-Driven Processing Verification
+The event-driven flow was confirmed end-to-end:
+1. Operational data was processed successfully.
+2. Abnormal behavior was detected.
+3. An anomaly event was generated.
+4. The event was published to the in-memory topic.
+5. The event was consumed from the topic.
+6. The event was processed successfully in the downstream AIOps pipeline.
+7. The final output correctly represented the detected operational issue.
+
+### Verification Evidence
+The workflow was executed successfully using the project pipeline and the outputs confirmed the expected results:
+
+- Records processed: 10
+- Anomalies detected: 2
+- Events consumed: 2
+
+This demonstrates that the AIOps event flow is functioning correctly and that the erroneous conditions were successfully identified and processed through the complete workflow.
+
+### Final Outcome
+The project successfully demonstrates a working anomaly detection and event-driven AIOps simulation, with telemetry data flowing through each processing stage and producing accurate operational alerts for abnormal system behavior.
+
