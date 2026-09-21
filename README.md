@@ -27,3 +27,29 @@ Manual monitoring and static alerting often fail to catch complex service degrad
 ### Purpose of AIOps in this Assessment
 The goal of implementing AIOps in this challenge is to demonstrate automated telemetry processing and anomaly detection. By routing detected anomalies through an event-driven architecture (Producer → Topic → Consumer), the system automates fault identification and streamlines incident analysis without human intervention.
 
+## TASK2: Data Analysis & Observations
+
+### 1. Metrics Fields
+* `response_time_ms`: Service latency in milliseconds.
+* `cpu_percent`: Host CPU utilization percentage.
+* `memory_percent`: Host RAM/memory usage percentage.
+
+### 2. Log Fields
+* `log_level`: Severity level of the log message (`INFO`, `WARN`, `ERROR`).
+* `message`: Text description of the logged event or system status.
+
+### 3. Timestamp Usage
+* `timestamp`: ISO 8601 formatted string (e.g., `2026-03-30T10:00:00Z`).
+* **Usage:** Timestamps provide chronological ordering of operational telemetry, allowing the system to track performance trends over time, correlate metric anomalies with concurrent log events, and trace incident progression.
+
+### 4. Normal Observations
+Observations representing healthy service conditions exhibit:
+* Low response latency (~120ms – 150ms)
+* Moderate host resource usage (`cpu_percent` ~ 40%–55%, `memory_percent` ~ 50%–60%)
+* `log_level` set to `INFO` with successful execution logs (e.g., `"Payment request processed successfully"`)
+
+### 5. Unusual / Anomalous Observations
+Observations representing performance degradation or failure exhibit:
+* **Latency Spikes:** `response_time_ms` exceeding threshold limits (e.g., spiking over 1000ms / 2500ms).
+* **Resource Exhaustion:** Extreme CPU utilization (`cpu_percent` > 85%–90%) or RAM saturation (`memory_percent` > 85%–90%).
+* **Elevated Log Errors:** Records with `WARN` or `ERROR` log levels indicating failed backend requests, database connection timeouts, or unhandled exceptions.
