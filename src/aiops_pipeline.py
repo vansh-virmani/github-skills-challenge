@@ -15,25 +15,37 @@ def run_pipeline(file_path):
     data = load_data(file_path)
 
     # INTENTIONAL ASSESSMENT ISSUE #2
-    producer_topic = EventTopic("service-events")
+    topic = EventTopic("anomaly-events")
 
     detector = AnomalyDetector()
-    producer = EventProducer(producer_topic)
+    producer = EventProducer(topic)
 
     # INTENTIONAL ASSESSMENT ISSUE #3
-    consumer_topic = EventTopic("anomaly-events")
-    consumer = EventConsumer(consumer_topic)
+    consumer = EventConsumer(topic)
 
     detected_events = []
 
+    print("=" * 50)
+    print("Data -> Anomaly -> Producer -> Topic -> Consumer -> AIOps Processing")
+    print(f"[Data] Loading telemetry from: {file_path}")
+    print(f"[Data] Records loaded: {len(data)}")
+
     for record in data:
+        print(f"\n[Data] Processing record: {record['service']} @ {record['timestamp']}")
         event = detector.detect(record)
 
         if event:
+            print(f"[Anomaly] Detected: {event['reasons']}")
             producer.publish(event)
             detected_events.append(event)
+            print(f"[Producer] Published to topic: {topic.name}")
+        else:
+            print("[Anomaly] No anomaly found")
 
+    print(f"\n[Topic] Messages in queue: {len(topic.get_messages())}")
     consumed_events = consumer.consume()
+    print(f"[Consumer] Consumed events: {len(consumed_events)}")
+    print("[AIOps Processing] Final downstream processing complete")
 
     return {
         "records_processed": len(data),
