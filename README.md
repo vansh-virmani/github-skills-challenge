@@ -68,3 +68,43 @@ Observations representing performance degradation or failure exhibit:
 ### Limitations & Improvements
 * **Limitation:** Static thresholding does not dynamically adjust to scheduled high-traffic spikes or seasonal baseline changes.
 * **Possible Improvement:** Replace fixed thresholds with statistical anomaly detection (e.g., rolling standard deviation / Z-score) or dynamic baseline monitoring.
+
+### task 5
+
+Identify the Affected Component
+The issue was identified by running the pipeline and test suite to observe the failing behavior. The affected component was the anomaly detection and event-processing flow in the repository, specifically the modules responsible for telemetry analysis and event publication/consumption.
+
+Determine the Cause
+The root cause was a combination of:
+threshold logic that did not align with the assessment requirements
+incorrect handling of warning/error log levels
+an event flow that needed to be verified from data ingestion through anomaly detection, publishing, topic storage, and consumer retrieval
+The investigation confirmed that the telemetry data in service_data.json contained abnormal records requiring detection based on:
+
+response time greater than 1000 ms
+CPU utilization above 85%
+memory utilization above 85%
+WARN / ERROR log levels being flagged with correct reason strings
+Apply Corrections
+A minimal fix was applied within the existing architecture:
+
+updated anomaly thresholds in anomaly_detector.py
+corrected warning/error reason labeling
+kept the event-driven producer/topic/consumer structure intact
+added clear runtime output to confirm the event lifecycle
+Execute and Verify
+The pipeline and tests were re-run to verify that the issue was resolved.
+
+Verified result:
+
+Records processed: 10
+Anomalies detected: 2
+Events consumed: 2
+This confirms that data successfully moved through:
+
+Data ingestion
+Anomaly detection
+Producer publishing
+Topic queue
+Consumer consumption
+Downstream AIOps processing
